@@ -1,0 +1,63 @@
+.container {
+    padding: 40px;
+}
+.filtersContainer {
+    padding: 10px;
+    background-color: rgba(0, 174, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.listContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    /* estate block */
+    >div{
+        width: 30%;
+        min-width: 400px;
+        max-width: 500px;
+        height: auto;
+        margin: 20px;
+        background-color: rgba(0, 0, 0, 0.1);
+        /* image block of estate */
+        >div:nth-child(1) {
+            height: 240px;
+            img {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+                background-color: rgba($color: #000000, $alpha: 0.1);
+            }
+        }
+        /* info block of estate */
+        >div:nth-child(2) {
+            padding: 18px;
+            >div {
+                padding: 5px 0
+            }
+            /* title of estate */
+            >div:nth-child(1) {
+                font-size: 21px;
+                font-weight: 500;
+            }
+            /* price of estate */
+            >div:nth-child(2) {
+                font-size: 16px;
+                font-weight: 500;
+                letter-spacing: 0.5px;
+            }
+            /* description of estate */
+            >div:nth-child(3) {
+                font-size: 15px;
+                font-weight: 500;
+                letter-spacing: 0.5px;
+            }
+        }
+    }
+}
