@@ -14,7 +14,7 @@ const PropertyCard: FC = (estate: any) => {
             <div>
                 <div>{estate.name}</div>
                 <div className='textAccent1'>{"€"+estate.price}</div>
-                <div className='textSecondary'>{estate.description}</div>
+                <div className='textSecondary'>{estate.description.substr(0, 200)+"..."}</div>
                 <Link href={`/properties/${estate.id}`}><button>see details</button></Link>
             </div>
             
