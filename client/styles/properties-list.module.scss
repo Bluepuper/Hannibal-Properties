@@ -3,10 +3,54 @@
 }
 .filtersContainer {
     padding: 10px;
-    background-color: rgba(0, 174, 255, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
+    button {
+        position: relative;
+        cursor: pointer;
+        width: 200px;
+        padding: 14px 0;
+        margin: 0 20px;
+        font-family: inherit;
+        border-radius: 0px;
+        border: 1px solid grey;
+        transition: ease 0.2s;
+        color: rgb(0,45,71);
+        span {
+            font-size: 14px;
+        }
+        ul {
+            display: none;
+            font-size: 14px;
+            transition: ease 0.2s;
+            width: 200px;
+            border: 1px solid grey;
+            position: absolute;
+            top: calc(100% - 2px);
+            left: -1px;
+            background-color: rgb(240,240,240);
+            list-style-type: none;
+            li {
+                padding: 5px;
+                transition: ease 0.2s;
+            }
+            li:hover {
+                background-color: rgb(0,45,71);
+                color: white;
+            }   
+        }
+    }
+    button:hover {
+        background-color: rgb(0,45,71);
+        border-color: rgb(0,45,71);
+        span {
+            color: white;
+        }
+        ul {
+            display: block;
+        }
+    }
 }
 .listContainer {
     display: flex;
@@ -20,7 +64,7 @@
         max-width: 500px;
         height: auto;
         margin: 20px;
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.05);
         /* image block of estate */
         >div:nth-child(1) {
             height: 240px;

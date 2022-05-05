@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&display=swap');
 
-$backgroundPrimary:   rgba(0, 0, 0, 0.1);
+$backgroundPrimary:   rgb(240, 240, 240);
+$backgroundHeader:    rgb(240, 240, 240);
+$backgroundFooter:    rgb(240, 240, 240);
 $textPrimary:         rgb(40, 40, 40);
 $textSecondary:       rgb(100, 100, 100);
 $textAccent1:         #c06b1b;
@@ -26,8 +28,14 @@ a {
   margin: 0;
   box-sizing: border-box;
 }
-.bgPrimary{
+.bgPrimary {
   background-color: $backgroundPrimary;
+}
+.bgHeader {
+  background-color: $backgroundHeader;
+}
+.bgFooter {
+  background-color: $backgroundFooter;
 }
 .textPrimary {
   color: $textPrimary;
