@@ -3,6 +3,7 @@
 export default async function handler(req: any, res: any) {
     const response = await fetch('http://localhost:5000/properties/', {
         method: 'POST',
+        credentials: 'include',
         body: JSON.stringify({
             name: req.body.name,
             description: req.body.description,
@@ -16,7 +17,8 @@ export default async function handler(req: any, res: any) {
         }),
         headers: {'Content-Type': 'application/json'}
     })
-    const isCreated = await response.json()
+    console.log("API FROM CONTAINER")
+    const isCreated = await res.json()
     res.status(200).json(isCreated)
 
 }

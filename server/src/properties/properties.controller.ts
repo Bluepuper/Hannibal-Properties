@@ -1,15 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, Session, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { CreateQuestionDto } from './dto/create-question.dto';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { PropertiesService } from './properties.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Response, Request } from 'express';
 
 @Controller('properties')
 export class PropertiesController {
 
     constructor(private propertiesService: PropertiesService) {}
 
+    // @UseGuards(JwtAuthGuard)
     @Get()
-    getAll() {
+    getAll(
+        @Req() request
+    ) {
+        console.log(request.user)
         return this.propertiesService.getAllProperties()
     }
 
@@ -18,26 +25,48 @@ export class PropertiesController {
         return this.propertiesService.getPropertyById(id)
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     //@UseInterceptors(FilesInterceptor('files'))
-    createProperty(
+    async createProperty(
         //@UploadedFiles() files: Array<Express.Multer.File>,
-        @Body() dto: CreatePropertyDto
+        @Body() dto: CreatePropertyDto,
+        @Req() request: Request
     ) {
-        console.log(dto)
-        return this.propertiesService.createProperty(dto)
+        const isCreated = await this.propertiesService.createProperty(dto)
+        return isCreated
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Put('/:id')
+    //@UseInterceptors(FilesInterceptor('files'))
+    async editProperty(
+        //@UploadedFiles() files: Array<Express.Multer.File>,
+        @Body() dto,
+        @Param('id') id: number
+    ) {
+        const property = await this.propertiesService.editProperty(id, dto)
+        return property
+        return true
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Delete('/:id')
     deleteProperty(@Param('id') id: number) {
         return this.propertiesService.deleteProperty(id)
     }
 
-    @Post('/links')
-    addLinksToProperty(
-        @Body() { propertyId, links }
+    @Post('/message')
+    addMessage(
+        @Body() dto: CreateQuestionDto
     ) {
-        return this.propertiesService.addLinksToProperty(propertyId, links)
+        return this.propertiesService.createMessage( dto )
+        //return {firstName, lastName, isCreated: true}
     }
 
+    @Get('/questions/get')
+    getAllQuestions() {
+        return this.propertiesService.getAllQuestions()
+        //return {firstName, lastName, isCreated: true}
+    }
 }

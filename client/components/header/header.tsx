@@ -33,10 +33,10 @@ const Header = () => {
             name: 'Contact us',
             link: '/contacts'
         },
-        {
-            name: 'Languages',
-            link: './'
-        }
+        // {
+        //     name: 'Languages',
+        //     link: './'
+        // }
     ]
 
     // Exactly 4 colors
@@ -49,7 +49,7 @@ const Header = () => {
 
     return (
         <>
-            <div className={`${styles.container} bgPrimary`}>
+            <div className={styles.container}>
                 <Image src={logo} height={115} width={150}></Image>
                 <div className={`${styles.menuBurger}`} onClick={() => setVisibilityOfMenu(true)}>
                     <div></div>
@@ -59,6 +59,7 @@ const Header = () => {
             </div>
             {menubgs.map((color, index) => { return(
                 <div
+                    key={index}
                     className={`${styles.menuSideSecondary}`}
                     style={{
                         transitionDelay: `0.${index}s`,
@@ -80,14 +81,14 @@ const Header = () => {
                 >
                     {menuItems.map(({name, link}, index) => {
                         return(
-                            <Link href={link}>
-                                <div key={index}>
+                            <Link href={link} key={index}>
+                                <div>
                                     <span
                                         onMouseEnter={(e) => onMouseEnterHandler(e)}
                                         onMouseLeave={(e) => onMouseLeaveHandler(e)}
                                         style={{
                                             transform: isMenuVisible? "" : "translateY(150%)",
-                                            transition: `transform 0.3s ease ${0.8 + index * 0.05}s`,
+                                            transition: `transform 0.5s ease ${0.8 + index * 0.05}s`,
                                         }}
                                     >
                                         {name}
@@ -101,8 +102,8 @@ const Header = () => {
                     id="bgText"
                     className={`${styles.bgText}`}
                     style={{
-                        color: isBgTextVisible? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0)",
-                        letterSpacing: isBgTextVisible? "0px" : "15px",
+                        color: isBgTextVisible? "rgba(0,0,0,0.30)" : "rgba(0,0,0,0)",
+                        letterSpacing: isBgTextVisible? "10px" : "40px",
                         }}>{bgText}</div>
             </div>
         </>

@@ -1,20 +1,31 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 import Dashboard from '../../../../layouts/DashboardLayout'
 
-const EditPropertyPage: NextPage = ({estate}:any) => {
+const ViewPropertyPage: NextPage = ({estate}:any) => {
+    const router = useRouter()
+    const [error, setError] = useState('')
 
     const deleteEstate = async () => {
-        const id = estate.id
-		const res = await fetch(`../../../api/property/delete`, {
-			method: 'POST',
-			body: JSON.stringify({id: id}),
-			headers: {'Content-Type': 'application/json'}
-		})
+        await fetch(`http://localhost:5000/properties/${estate.id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin' : '*', 
+                'Access-Control-Allow-Credentials' : 'true',
+            }
+        })
+        .then(res => res.json())
+		.then(answ => answ === 1 ? router.push('/dashboard/properties'): answ)
+        .catch(err => console.log('err ', err))
 	}
 
 	return (
 		<Dashboard>
+            {estate ?
             <div>
                 <h2>{estate.name}</h2>
                 {/* <p>name: {estate.name}</p> */}
@@ -22,26 +33,27 @@ const EditPropertyPage: NextPage = ({estate}:any) => {
                 <p>type: {estate.type}</p>
                 <p>price: {estate.price}</p>
                 <p>region: {estate.region}</p>
-                <p>begrooms: {estate.begrooms}</p>
+                <p>begrooms: {estate.bedrooms}</p>
                 <p>bathrooms: {estate.bathrooms}</p>
                 <p>surface: {estate.surface}</p>
                 {estate.images.length ?
-                    estate.images.map((image: any) => {
+                    estate.images.map((image: any, index: number) => {
                         return(
-                            <div><img src={image.link} width="500px"/></div>
+                            <div key={index}><img src={image.link} width="500px"/></div>
                         )
                     })
                     :
                     null
                 }
             </div>
+            :
+            <div>there is no such estate</div>
+            }
+            
             <Link href={`../edit/${estate.id}`}>
                 <button>Edit this estate</button>
             </Link>
-
-                <a href="./delete">
-                    <button onClick={deleteEstate}>Delete this estate</button>
-                </a>
+            <button onClick={deleteEstate}>Delete this estate</button>
                 
 
             
@@ -50,7 +62,7 @@ const EditPropertyPage: NextPage = ({estate}:any) => {
 	)
 } 
 
-export default EditPropertyPage
+export default ViewPropertyPage
 
 export async function getServerSideProps({params}: any) {
 

@@ -7,12 +7,20 @@ const NavBar = () => {
     const router = useRouter()
     const menu = [
         {
-            name: 'Properties',
+            name: 'List of properties',
             link: '/dashboard/properties'
         },
+        // {
+        //     name: 'Property\'s features',
+        //     link: '/dashboard/property-features'
+        // },
         {
             name: 'Questions',
             link: '/dashboard/questions'
+        },
+        {
+            name: 'Logout',
+            link: '/dashboard/logout'
         },
     ]
 

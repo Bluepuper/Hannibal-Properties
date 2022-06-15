@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import Router, { useRouter } from 'next/router'
 import { useState , useCallback} from 'react'
 import Dashboard from '../../../layouts/DashboardLayout'
 // import {useDropzone} from 'react-dropzone'
@@ -14,6 +15,8 @@ const CreatePropertyPage: NextPage = () => {
 	const [bathrooms, setBathrooms] = useState('')
 	const [surface, setSurface] = useState('')
 	const [links,setLinks] = useState('')
+	const [isCreated, setIsCreated] = useState('')
+	const router = useRouter()
 
 
 	// const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -38,20 +41,29 @@ const CreatePropertyPage: NextPage = () => {
 	  
 	// const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
-
-	
-
 	const addEstate = async () => {
 		const linksToSend = links.split(/[\n\s]/)
-		const res = await fetch('../../api/property/create', {
+		
+		await fetch('http://localhost:5000/properties/', {
 			method: 'POST',
-			body: JSON.stringify({name, description, type, price, region, bedrooms, bathrooms, surface, linksToSend}),
+			credentials: 'include',
+			body: JSON.stringify({
+				name: name,
+				description: description,
+				type: type,
+				price: Number(price),
+				region: region,
+				bedrooms: Number(bedrooms),
+				bathrooms: Number(bathrooms),
+				surface: Number(surface),
+				links: linksToSend
+			}),
 			headers: {'Content-Type': 'application/json'}
 		})
-		const response = await res.json()
-		console.log("created")
+		.then(res => res.json())
+		.then(data => console.log(data))
+		.catch(console.log)
 	}
-
 
 	// function updateProgress(evt:any, index:number) {
 	// 	if (evt.lengthComputable) {
@@ -60,9 +72,14 @@ const CreatePropertyPage: NextPage = () => {
 	// 	  console.log(index, " load progress: ", loaded.toFixed(2))
 	// 	}
 	//   }
-
+	const types = ["Choose type", "Apartament", "Detached house", "Villa", "Farm"]
+	const regions = ["Choose region","Abruzzo", "Aosta Valley", "Apulia", "Basilicata", "Calabria", "Campania",
+				"Emilia-Romagna", "Friuli Venezia Giulia", "Lazio", "Liguria", "Lombardy", "Marche",
+				"Molise", "Piedmont", "Sardinia", "Sicily", "Trentino-South Tyrol", "Tuscany",
+				"Umbria", "Veneto"]
 	return (
 		<Dashboard>
+			{isCreated ? <div>{isCreated}</div> : null}
 			<p>
 				<input
 				type='text'
@@ -72,20 +89,19 @@ const CreatePropertyPage: NextPage = () => {
 				/>
 			</p>
 			<p>
-				<input
-					type='text'
-					placeholder='description'
-					value={description}
-					onChange={(e) => setDescription(e.target.value)}
-				/>
+				<select onChange={(e) => setType(e.target.value)}>
+					{types.map((item, index) => {
+					return (
+						index ? <option value={item}>{item}</option>: <option value="">{item}</option>
+					)})}
+				</select>
 			</p>
 			<p>
-				<input
-					type='text'
-					placeholder='type'
-					value={type}
-					onChange={(e) => setType(e.target.value)}
-				/>
+				<select onChange={(e) => setRegion(e.target.value)}>
+					{regions.map((item, index) => { return (
+						index ? <option value={item}>{item}</option>: <option value="">{item}</option>
+					)})}
+				</select>
 			</p>
 			<p>
 				<input
@@ -93,14 +109,6 @@ const CreatePropertyPage: NextPage = () => {
 					placeholder='price in euros'
 					value={price}
 					onChange={(e) => setPrice(e.target.value)}
-				/>
-			</p>
-			<p>
-				<input
-					type='text'
-					placeholder='region'
-					value={region}
-					onChange={(e) => setRegion(e.target.value)}
 				/>
 			</p>
 			<p>
@@ -129,7 +137,18 @@ const CreatePropertyPage: NextPage = () => {
 			</p>
 			<p>
 				<textarea
-					placeholder='surface'
+				 	cols={30}
+					rows={10}
+					placeholder='description'
+					value={description}
+					onChange={(e) => setDescription(e.target.value)}
+				/>
+			</p>
+			<p>
+				<textarea
+				 	cols={30}
+					rows={10}
+					placeholder='links'
 					value={links}
 					onChange={(e) => setLinks(e.target.value)}
 				/>
@@ -144,17 +163,3 @@ const CreatePropertyPage: NextPage = () => {
 }
 
 export default CreatePropertyPage
-
-// {/* <div {...getRootProps()}>
-// 				<input {...getInputProps()} />
-// 				{
-// 					isDragActive ?
-// 					<div style={{height: "50px", border: "solid 1px grey"}}>Drop the files here ...</div>:
-// 					<div style={{height: "50px", border: "solid 1px grey"}}>Drag 'n' drop some files here, or click to select files</div>
-// 				}
-// 			</div> */}
-// 			{/* {imagesUrl.map((imageUrl) => { return(
-// 				<div key={Math.random()}>
-// 					<img height={"200px"} src={imageUrl}/>
-// 				</div>
-// 			)})}	 */}

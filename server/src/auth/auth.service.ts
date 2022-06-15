@@ -23,20 +23,18 @@ export class AuthService {
         }
         const hashedPassword = await bcrypt.hash(userDto.password, 5)
         const user = await this.userService.createUser({ ...userDto, password: hashedPassword })
-        return this.generateToken(user)
+        return {token: this.generateToken(user)}
     }
 
     private async generateToken(user: User) {
         const payload = {email: user.username, id: user.id}
-        return {
-            token: this.jwtService.sign(payload)
-        }
+        return this.jwtService.sign(payload)
     }
 
     private async validateUser(userDto: CreateUserDto) {
         const user = await this.userService.getUserByUsername(userDto.username)
         if (!user) {
-            throw new UnauthorizedException({message: 'Incorrect email'})
+            throw new UnauthorizedException({message: 'User with such email was not found'})
         }
         const passwordEquals = await bcrypt.compare(userDto.password, user.password)
         if (user && passwordEquals) {
@@ -45,4 +43,14 @@ export class AuthService {
         throw new UnauthorizedException({message: 'Incorrect password'})
     }
 
+    async isAuthenticated(token: string) {
+        try {
+            const data = await this.jwtService.verifyAsync(token)
+            const user = await this.userService.getUserByUsername(data.email)
+            if (!user) throw new UnauthorizedException({message: 'User with such email was not found'})
+            return true
+        } catch (e) {
+            throw new UnauthorizedException()
+        }
+    }
 }

@@ -1,5 +1,6 @@
 import { Column, DataType, Model, Table, HasMany } from "sequelize-typescript"
 import { Link } from './links.model'
+import { Question } from "./questions.model"
 
 interface PropertyCreationAttrs {
     name: string
@@ -22,7 +23,7 @@ export class Property extends Model<Property, PropertyCreationAttrs> {
     @Column({ type: DataType.STRING, unique: true, allowNull: false})
     name: string
 
-    @Column({ type: DataType.STRING, allowNull: false})
+    @Column({ type: DataType.STRING(3000), allowNull: false})
     description: string
 
     @Column({ type: DataType.STRING, allowNull: false})
@@ -45,5 +46,8 @@ export class Property extends Model<Property, PropertyCreationAttrs> {
     
     @HasMany(() => Link)
     images: Link[]
+
+    @HasMany(() => Question)
+    questions: Question[]
 
 }

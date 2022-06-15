@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { PropertiesModule } from './properties/properties.module';
 import { Property } from './properties/properteis.model';
 import { Link } from './properties/links.model';
+import { Question } from './properties/questions.model';
 
 @Module({
   controllers: [],
@@ -22,7 +23,7 @@ import { Link } from './properties/links.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Property, Link],
+      models: [User, Property, Link, Question],
       autoLoadModels: true
     }),
     UsersModule,
